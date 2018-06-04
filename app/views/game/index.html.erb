@@ -1,0 +1,32 @@
+<%= link_to 'Upload Images', player_images_path %><hr/><br/>
+
+<h1 id="count">10</h1>
+
+<!-- Instead of adding one <img> tag here, I used all images with loop and show/hide flow. Reason of doing this is to load the image faster when it will be changed according to timer. Replacing src will take time to load the image preview -->
+<% @images.each_with_index do |image, index| %>
+  <%= image_tag image.image.url, class: "#{index == 0 ? 'show' : 'hide' } timer_image", data: {index: index, image_id: image.id}, width: '200', height: '200' %>  
+<% end %><br/>
+
+<!-- Button for selecting the current timer and image -->
+<%= link_to 'Capture', 'javascript:void(0)', class: 'selectBtn', style: "float: pull-right" %><br/><hr/>
+
+<!-- Table for displaying play records -->
+<table border="1" class="plays_table">
+  <thead>
+    <tr><td>Timer Value</td><td>Image</td></tr>
+  </thead>
+  <tbody>
+    <% @plays.each do |play| %>
+      <tr>
+        <td><%= play.timer_value %></td>
+        <td><%= image_tag(play.image.url, width: '200', height: '100') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $(document).ready(function(){
+    setTimerActions();
+  })
+</script>

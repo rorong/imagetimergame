@@ -13,3 +13,13 @@
  *= require_tree .
  *= require_self
  */
+
+.plays_table {
+  width: 80%;
+}
+.hide {
+  display: none !important;
+}
+.show {
+  display: block !important;
+}
