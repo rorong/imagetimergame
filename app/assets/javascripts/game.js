@@ -1,28 +1,37 @@
-max_count = 10
-count = max_count
-index = 0
+var max_count = 10
+var count = max_count
+var index = 0
 
 // Event clicking on Capture button
-$(document).on('click', '.selectBtn', function(){
-  selected_image = $('img[data-index='+ index +']')
-  if (selected_image.length > 0) {
-    $('table tbody').append('<tr><td>'+ count +'</td><td>'+ getImage(selected_image.attr('src')) +'</td></tr>')
+window.onload = function() {
+  document.getElementById("captureBtn").onclick = function() {
+    var selected_image = document.querySelectorAll('[data-index="'+ index +'"]')
+    if (selected_image.length > 0) {
+      var table = document.getElementById("play_details");
+      var htmlString = '<tr><td>'+ count +'</td><td>'+ getImage(selected_image[0].getAttribute('src')) +'</td></tr>'
+      
+      table.insertAdjacentHTML('beforeend', htmlString);
 
-    $.ajax({
-      url: '/plays',
-      method: 'POST',
-      data: {
-        plays: {
-          timer_value: count,
-          image_id: selected_image.data('image-id')
-        }
-      }
-    })
-  }
-  else {
-    alert('Image not found. Please upload some images first.')
-  }
-})
+      // create a new XMLHttpRequest object!
+      var myRequest = new XMLHttpRequest();
+      var token = encodeURIComponent(document.getElementsByName("csrf-token")[0].getAttribute('content'));
+      var params = 'plays[timer_value]='+count+'&plays[image_id]='+selected_image[0].getAttribute("data-image-id")+'&authenticity_token='+token
+      
+      // open the request and pass the HTTP method name and the resource as parameters
+      myRequest.open('POST', '/plays', true);
+      myRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+      // write a function that runs anytime the state of the AJAX request changes
+      myRequest.onreadystatechange = function () {
+        if (myRequest.readyState === 4) {
+        };
+      };
+      myRequest.send(params);
+    }else {
+      alert('Image not found. Please upload some images first.')
+    }
+  };
+}
 
 function setTimerActions() {
   setInterval(function(){
@@ -30,13 +39,22 @@ function setTimerActions() {
     else { count-- }
 
     // countdown
-    $('#count').html(count)
+    document.getElementById("count").innerHTML = count
 
     // change image
-    total_images = $('img.timer_image').length
+    total_images = document.getElementsByClassName('timer_image').length
     index = getImageIndex(count, total_images)
-    $('img.timer_image[data-index='+ index +']').removeClass('hide').addClass('show')
-    $('img.timer_image').not('[data-index='+ index +']').removeClass('show').addClass('hide')
+
+    images = document.getElementsByClassName('timer_image')
+    image = document.querySelector('[data-index="'+ index +'"]')
+    image.classList.remove('hide')
+    image.classList.add('show')
+
+    other_image = document.querySelectorAll('img.timer_image:not([data-index="'+ index +'"])')
+    for (var i=0; i<other_image.length; i++) {
+      other_image[i].classList.remove('show')
+      other_image[i].classList.add('hide')
+    }
   }, 1000);
 }
 

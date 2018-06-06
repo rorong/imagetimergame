@@ -5,19 +5,16 @@ class PlayerImagesController < ApplicationController
 
   # Upload multiple selected images to server
   def create
-    error = nil
+    @error = nil
     image_params[:filearrays].each do |file|
       @player_image = PlayerImage.new(image: file)      
       unless @player_image.save
-        error = @player_image.errors.full_messages
+        @error = @player_image.errors.full_messages.join('\n')
         break
       end
     end
-
-    if error
-      render json: { data: error.join(', ')}, status: 422
-    else
-      render :index, status: 200
+    respond_to do |format|
+      format.js
     end
   end
 

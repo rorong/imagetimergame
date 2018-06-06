@@ -8,10 +8,10 @@
 <% end %><br/>
 
 <!-- Button for selecting the current timer and image -->
-<%= link_to 'Capture', 'javascript:void(0)', class: 'selectBtn', style: "float: pull-right" %><br/><hr/>
+<%= link_to 'Capture', 'javascript:void(0)', class: 'selectBtn', id: 'captureBtn', style: "float: pull-right" %><br/><hr/>
 
 <!-- Table for displaying play records -->
-<table border="1" class="plays_table">
+<table border="1" class="plays_table" id="play_details">
   <thead>
     <tr><td>Timer Value</td><td>Image</td></tr>
   </thead>
@@ -26,7 +26,8 @@
 </table>
 
 <script>
-  $(document).ready(function(){
+  (function() {
     setTimerActions();
-  })
+  })();
+
 </script>

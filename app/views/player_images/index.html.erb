@@ -1,4 +1,4 @@
-<%= link_to 'Play Game', game_index_path %><hr/><br/>
+<%= link_to 'Play Game', game_index_path, data: {turbolinks: false} %><hr/><br/>
 
 <%= form_for @player_image, url: player_images_path, remote: true, html: {multipart: true, id: 'playerImageUploader'} do |f| %>
   <%= f.file_field :filearrays, multiple: :true %>
